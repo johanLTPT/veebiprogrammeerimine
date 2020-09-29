@@ -14,7 +14,7 @@ if (isset($_POST["usersubmit"])) {
     $lastnameError = "Sisesta see nimi ka!";
   }
   if(empty($_POST["emailinput"]) and !empty($_POST["usersubmit"])) {
-    $emailError = "Email!";
+    $emailError = "Lisa Email!";
   }
   if(empty($_POST["genderinput"]) and !empty($_POST["usersubmit"])) {
     $genderError = "Vali sugu";
@@ -41,15 +41,15 @@ if (isset($_POST["usersubmit"])) {
 <form method="POST">
   <label for="firstnameinput">Eesnimi</label>
   <input type="text" name="firstnameinput" id="firstnameinput" value="<?php echo $firstname;?>">
-  <span class="error">* <?php echo $firstnameError;?></span>
+  <span class="error"> <?php echo $firstnameError;?></span>
   <br>
   <label for="lastnameinput">Perenimi</label>
   <input type="text" name="lastnameinput" id="lastnameinput" value="<?php echo $lastname;?>">
-  <span class="error">* <?php echo $lastnameError;?></span>
+  <span class="error"> <?php echo $lastnameError;?></span>
   <br>
   <label for="emailinput">email</label>
   <input type="email" name="emailinput" id="emailinput" value="<?php echo $email;?>">
-  <span class="error">* <?php echo $emailError;?></span>
+  <span class="error"> <?php echo $emailError;?></span>
   <br>
   <label for="genderinput">Sugu</label>
   <label for="gender1">Mees</label>
@@ -60,11 +60,11 @@ if (isset($_POST["usersubmit"])) {
   <br>
   <label for="passwordinput">Salasõna</label>
   <input type="password" name="passwordinput" id="passwordinput">
-  <span class="error">* <?php echo $passwordError;?></span>
+  <span class="error"> <?php echo $passwordError;?></span>
   <br>
   <label for="passwordsecondaryinput">Salasõna uuesti</label>
   <input type="password" name="passwordsecondaryinput" id="passwordsecondaryinput">
-  <span class="error">* <?php echo $passwordsecondaryError;?></span>
+  <span class="error"> <?php echo $passwordsecondaryError;?></span>
   <br>
 
   <input type="submit" name="usersubmit" value="Lisa kasutaja">
