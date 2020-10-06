@@ -5,7 +5,7 @@ require("fn_common.php");
 require("fn_users.php");
 $database = "if20_johan_le_1";
 $emailError = $passwordError = "";
-$email =  "";
+$email = $notice = "";
 if (isset($_POST["login"])) {
   
 
@@ -50,6 +50,7 @@ if (isset($_POST["login"])) {
   <label for="passwordinput">Salasõna</label>
   <input type="password" name="passwordinput" id="passwordinput">
   <span class="error"><?php echo $passwordError;?></span>
+  <span class="error"><?php echo $notice;?></span>
   <br>
 
   <input type="submit" name="login" value="Logi sisse">
