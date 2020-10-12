@@ -48,12 +48,18 @@ function signin($email, $password)
                 $_SESSION["userfirstname"] = $firstnamefromdb;
                 $_SESSION["userlastname"] = $lastnamefromdb;
                 //värvid lugeda profiilist, kui olemas
-                if(isset($_SESSION["userbgcolor"])){
-                
-                }else{
-                $_SESSION["userbgcolor"] = "#FFF";
-                $_SESSION["usertextcolor"] = "#000";
-                }
+				$stmt->close();
+				$stmt = $conn->prepare("SELECT bgcolor, txtcolor FROM vpuserprofiles WHERE userid = ?");
+				$stmt->bind_param("i", $_SESSION["userid"]);
+				$stmt->bind_result($bgcolorfromdb, $txtcolorfromdb);
+				$stmt->execute();
+				if($stmt->fetch()){
+					$_SESSION["usertxtcolor"] = $txtcolorfromdb;
+					$_SESSION["userbgcolor"] = $bgcolorfromdb;
+				} else {
+					$_SESSION["usertxtcolor"] = "#000000";
+					$_SESSION["userbgcolor"] = "#FFFFFF";
+				}
                 $stmt->close();
                 $conn->close();
                 header("Location: home.php");
