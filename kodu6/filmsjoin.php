@@ -29,7 +29,7 @@ if (isset($_POST["filmjoinsubmit"])) {
 <p>See veebileht on loodud õppetöö käigus ning ei sisalda mingit tõsiseltvõetavat sisu!</p>
 <p>See konkreetne leht on loodud veebiprogrammeerimise kursusel aasta 2020 sügissemestril <a href="https://www.tlu.ee">Tallinna Ülikooli</a> Digitehnoloogiate instituudis.</p>
 <hr>
-<h2>Määrame filmile žanri</h2>
+<h2>Määrame filmile Stuudio</h2>
 <hr>
 <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
   <?php echo readfilm($film); ?>
