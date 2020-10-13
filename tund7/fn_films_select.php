@@ -1,45 +1,7 @@
 <?php
 $database = "if20_johan_le_1";
 //var_dump($GLOBALS);
-function readfilms()
-{
-    //andmebaasi lugemine
-    $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
-    //$stmt = $conn->prepare("SELECT pealkiri, aasta, kestus, zanr, tootja, lavastaja FROM film");
-    $stmt = $conn->prepare("SELECT * FROM film");
-    echo $conn->error;
-    //seome tulemuse muutujaga
-    $stmt->bind_result($titlefromdb, $yearfromdb, $durationfromdb, $genrefromdb, $studiofromdb, $directorfromdb);
-    $stmt->execute();
-    $filmhtml = "  <ol>\n";
-    while ($stmt->fetch()) {
-        $filmhtml .= "\t<li>" . $titlefromdb . "\n";
-        $filmhtml .= "\t\t<ul>\n";
-        $filmhtml .= "\t\t\t<li>Valmimisaasta: " . $yearfromdb . "</li>\n";
-        $filmhtml .= "\t\t\t<li>Kestvus: " . $durationfromdb . " min.</li>\n";
-        $filmhtml .= "\t\t\t<li>Žanr: " . $genrefromdb . "</li>\n";
-        $filmhtml .= "\t\t\t<li>Stuudio: " . $studiofromdb . "</li>\n";
-        $filmhtml .= "\t\t\t<li>Lavastaja: " . $directorfromdb . "</li>\n";
-        $filmhtml .= "\t\t</ul>\n";
-        $filmhtml .= "\t</li>\n";
-    }
-    $filmhtml .= "  </ol>\n";
-    $stmt->close();
-    $conn->close();
-    return $filmhtml;
-}
-function savefilm($titleinput, $yearinput, $durationinput, $genreinput, $studioinput, $directorinput)
-{
-    $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
-    $stmt = $conn->prepare("INSERT INTO film (pealkiri, aasta, kestus, zanr, tootja, lavastaja) VALUES(?,?,?,?,?,?)");
-    echo $conn->error;
-    $stmt->bind_param("siisss", $titleinput, $yearinput, $durationinput, $genreinput, $studioinput, $directorinput);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
-}
-
-function readfilm($selected)
+function readfilmselect($selected)
 {
     $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
     $stmt = $conn->prepare("SELECT movie_id, title FROM movie");
@@ -65,7 +27,7 @@ function readfilm($selected)
     return $notice;
 }
 
-function readstudio($studio)
+function readstudioselect($studio)
 {
     $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
     $stmt = $conn->prepare("SELECT production_company_id, company_name FROM production_company");
@@ -91,7 +53,7 @@ function readstudio($studio)
     return $notice;
 }
 
-function readhuman($human)
+function readhumanselect($human)
 {
     $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
     $stmt = $conn->prepare("SELECT person_id, first_name FROM person");
@@ -116,7 +78,7 @@ function readhuman($human)
     $conn->close();
     return $notice;
 }
-function readposition($position)
+function readpositionselect($position)
 {
     $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
     $stmt = $conn->prepare("SELECT position_id, position_name FROM position");
@@ -135,6 +97,59 @@ function readposition($position)
         $notice = '<select name="positioninput" id="positioninput">' . "\n";
         $notice .= '<option value="" selected disabled>Amet</option>' . "\n";
         $notice .= $positions;
+        $notice .= "</select> \n";
+    }
+    $stmt->close();
+    $conn->close();
+    return $notice;
+}
+function readquoteselect($position)
+{
+    $notice = "err";
+    $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
+    $stmt = $conn->prepare("SELECT quote_id, quote_text FROM quote");
+    echo $conn->error;
+    $stmt->bind_result($idfromdb, $positionfromdb);
+    $stmt->execute();
+    $positions = "";
+    while ($stmt->fetch()) {
+        $positions .= '<option value="' . $idfromdb . '"';
+        if ($idfromdb == $position) {
+            $positions .= " selected";
+        }
+        $positions .= ">" . $positionfromdb . "</option> \n";
+    }
+    if (!empty($positions)) {
+        $notice = '<select name="quoteinput" id="quoteinput">' . "\n";
+        $notice .= '<option value="" selected disabled>Tsitaat</option>' . "\n";
+        $notice .= $positions;
+        $notice .= "</select> \n";
+    }
+    $stmt->close();
+    $conn->close();
+    return $notice;
+}
+function readgenreselect($selected)
+{
+    //kopeeritud githubist
+    $notice = "<p>Kahjuks žanre ei leitud!</p> \n";
+    $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
+    $stmt = $conn->prepare("SELECT genre_id, genre_name FROM genre");
+    echo $conn->error;
+    $stmt->bind_result($idfromdb, $genrefromdb);
+    $stmt->execute();
+    $genres = "";
+    while ($stmt->fetch()) {
+        $genres .= '<option value="' . $idfromdb . '"';
+        if (intval($idfromdb) == $selected) {
+            $genres .= " selected";
+        }
+        $genres .= ">" . $genrefromdb . "</option> \n";
+    }
+    if (!empty($genres)) {
+        $notice = '<select name="genreinput">' . "\n";
+        $notice .= '<option value="" selected disabled>Vali žanr</option>' . "\n";
+        $notice .= $genres;
         $notice .= "</select> \n";
     }
     $stmt->close();
@@ -190,6 +205,33 @@ function newfilmandhuman($film, $human, $position)
             $notice = "ERROR: " . $stmt->error;
         }
     }
+    $stmt->close();
+    $conn->close();
+    return $notice;
+}
+function newfilmandgenre($selectedfilm, $selectedgenre)
+{
+    $notice = "";
+    $conn = new mysqli($GLOBALS["serverhost"], $GLOBALS["serverusername"], $GLOBALS["serverpassword"], $GLOBALS["database"]);
+    $stmt = $conn->prepare("SELECT movie_genre_id FROM movie_genre WHERE movie_id = ? AND genre_id = ?");
+    echo $conn->error;
+    $stmt->bind_param("ii", $selectedfilm, $selectedgenre);
+    $stmt->bind_result($idfromdb);
+    $stmt->execute();
+    if ($stmt->fetch()) {
+        $notice = "Selline seos on juba olemas!";
+    } else {
+        $stmt->close();
+        $stmt = $conn->prepare("INSERT INTO movie_genre (movie_id, genre_id) VALUES(?,?)");
+        echo $conn->error;
+        $stmt->bind_param("ii", $selectedfilm, $selectedgenre);
+        if ($stmt->execute()) {
+            $notice = "Uus seos edukalt salvestatud!";
+        } else {
+            $notice = "Seose salvestamisel tekkis tehniline tõrge: " . $stmt->error;
+        }
+    }
+
     $stmt->close();
     $conn->close();
     return $notice;
