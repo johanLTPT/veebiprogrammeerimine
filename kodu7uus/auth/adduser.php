@@ -1,7 +1,7 @@
 <?php
-require("../../../config.php");
-require("./other/header.php");
-require("fn_common.php");
+require("../../../../config.php");
+require("../other/header.php");
+require("../fn_common.php");
 require("fn_users.php");
 $database = "if20_johan_le_1";
 $monthnameset = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
@@ -160,6 +160,6 @@ if (isset($_POST["usersubmit"])) {
 
   <input type="submit" name="usersubmit" value="Lisa kasutaja">
 </form>
-<ul><li><a href="home.php">Avaleht</a></li></ul>
+<ul><li><a href="../home.php">Avaleht</a></li></ul>
 
 </body>

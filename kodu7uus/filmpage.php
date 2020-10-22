@@ -1,5 +1,5 @@
 <?php
-  //var_dump($_POST);
+  require("auth/usesession.php");
   require("../../../config.php");
   require("other/picshow.php");
   require("other/header.php");
